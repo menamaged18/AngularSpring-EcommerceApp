@@ -1,0 +1,79 @@
+<div class="home-container">
+  <header class="page-header">
+    <h1 class="page-title">Product Catalog</h1>
+    <p class="page-subtitle">Browse our collection of premium products</p>
+  </header>
+
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p class="loading-text">Loading products...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-container">
+      <div class="error-icon">⚠️</div>
+      <h3 class="error-title">Something went wrong</h3>
+      <p class="error-message">{{ error() }}</p>
+      <button class="retry-button" (click)="store.loadProducts()">Try Again</button>
+    </div>
+  } @else {
+    <div class="products-container">
+      <div class="products-grid">
+        @for (p of products(); track p.id) {
+          <div class="product-card">
+            <div class="product-image-container">
+              <img 
+                [src]="p.imageUrl || 'noImage.png'" 
+                [alt]="p.name"
+                class="product-image"
+                (error)="p.imageUrl = 'noImage.png'"
+              />
+              @if (!p.is_active) {
+                <div class="inactive-badge">Out of Stock</div>
+              }
+              
+              @if (p.reviews?.length) {
+                <div class="review-badge">
+                  ⭐ {{ getAverageRating(p.reviews) }}
+                </div>
+              }
+            </div>
+
+            <div class="product-info">
+              <div class="product-header">
+                <span class="product-category">{{ p.category }}</span>
+                <span class="product-weight">{{ p.weight }}g</span>
+              </div>
+              
+              <h3 class="product-name">{{ p.name }}</h3>
+              <p class="product-description">{{ p.description | slice:0:100 }}...</p>
+              
+              <div class="product-footer">
+                <div class="price-section">
+                  <span class="current-price">{{ p.price | currency }}</span>
+                  @if (p.cost_price) {
+                    <span class="original-price">{{ p.cost_price | currency }}</span>
+                  }
+                </div>
+                <span class="product-brand">{{ p.brand }}</span>
+              </div>
+              
+              <button class="view-details-button">View Details</button>
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-state">
+            <div class="empty-icon">📦</div>
+            <h3>No products found</h3>
+            <p>Add some products to get started</p>
+            <app-add-product></app-add-product>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+<!-- 
+<app-add-product>
+
+</app-add-product>   -->
