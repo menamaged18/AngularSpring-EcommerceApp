@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { productStore } from '../../store/ProductStore';
-import { AddProduct } from '../../components/add-product/add-product'
+import { AddProduct } from '../../components/add-product/add-product';
 
 @Component({
   selector: 'app-home',

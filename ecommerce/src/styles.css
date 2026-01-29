@@ -1,8 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
-html, body {
+/* ---- old style ---- */
+/* i think i will needed later on something so i kept it */
+/* html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   min-height: 100%;
-  background-color: #667eea; /* Match your start color to prevent flashes */
+  background-color: #667eea;
+} */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  /* A smooth gradient that starts with original color */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
