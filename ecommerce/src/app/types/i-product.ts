@@ -13,7 +13,7 @@ export interface Product {
   created_at: string;
   updated_at: string | null;
   is_active: boolean;
-  reviews: ReviewItem[];
+  reviews?: ReviewItem[];
   imageUrl: string;
 }
 

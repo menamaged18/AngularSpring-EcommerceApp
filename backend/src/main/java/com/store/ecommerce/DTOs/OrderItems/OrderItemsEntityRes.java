@@ -18,7 +18,7 @@ public class OrderItemsEntityRes {
 
     public OrderItemsEntityRes(OrderItems orderItem) {
         this.id = orderItem.getId();
-        this.quantity = orderItem.getQuantity();
+        this.quantity = orderItem.getProductQuantity();
         
         if (orderItem.getProduct() != null) {
             this.productId = orderItem.getProduct().getId();

@@ -338,3 +338,50 @@
     max-width: 100%;
   }
 }
+
+/* new styels for add product to order or cart */
+.actions-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-action {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.btn-cart {
+  background-color: #f0f4f8;
+  color: #2c3e50;
+  border: 1px solid #dae1e7;
+}
+
+.btn-cart:hover:not(:disabled) {
+  background-color: #e2e8f0;
+  border-color: #cbd5e0;
+}
+
+.btn-order {
+  background-color: #3b82f6; /* Primary Blue */
+  color: white;
+}
+
+.btn-order:hover:not(:disabled) {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

@@ -25,13 +25,13 @@ public class OrderCommonOperationService {
     }
 
     public void updateUpdatedAt(Order order){
-        order.setUpdated_at(LocalDateTime.now());
+        order.setUpdatedAt(LocalDateTime.now());
         orderRepo.save(order);
     }
 
     public void updateUpdatedAt(Long orderId){
         Order order = orderRepo.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found!"));
-        order.setUpdated_at(LocalDateTime.now());
+        order.setUpdatedAt(LocalDateTime.now());
         orderRepo.save(order);
     }
 }

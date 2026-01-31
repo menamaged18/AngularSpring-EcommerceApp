@@ -1,0 +1,109 @@
+<div class="order-container">
+  
+  @if (store.loading()) {
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+    </div>
+  }
+
+  @if (store.error()) {
+    <div class="error-banner">
+      <p>{{ store.error() }}</p>
+      <button (click)="store.clearError()">Dismiss</button>
+    </div>
+  }
+
+  <div class="content-wrapper">
+    <div class="header">
+      <h1>Your Shopping Cart</h1>
+      <p class="subtitle">Order #{{ store.currentOrder()?.id || '...' }}</p>
+    </div>
+
+    <div class="order-layout">
+      
+      <div class="items-section">
+        @if (displayItems().length === 0) {
+          <div class="empty-state">
+            <p>Your order is empty.</p>
+          </div>
+        } @else {
+          <div class="items-list">
+            @for (item of displayItems(); track item.id) {
+              <div class="item-card">
+                <div class="item-info">
+                  <h3>{{ item.productName }}</h3>
+                  <span class="price-tag">${{ item.productPrice }}</span>
+                </div>
+                
+                <div class="item-actions">
+                  <div class="quantity-control">
+                    <button 
+                      class="qty-btn" 
+                      (click)="decreaseQuantity(item)"
+                      [disabled]="store.loading()">
+                      −
+                    </button>
+                    <span class="qty-display">{{ item.quantity }}</span>
+                    <button 
+                      class="qty-btn" 
+                      (click)="increaseQuantity(item)"
+                      [disabled]="store.loading()">
+                      +
+                    </button>
+                  </div>
+                  
+                  <button 
+                    class="remove-btn" 
+                    (click)="removeItem(item.id)"
+                    [disabled]="store.loading()">
+                    Remove
+                  </button>
+                </div>
+                
+                <div class="item-total">
+                  ${{ (item.productPrice * item.quantity).toFixed(2) }}
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="summary-section">
+        <div class="summary-card">
+          <h2>Order Summary</h2>
+          
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>${{ totalAmount().toFixed(2) }}</span>
+          </div>
+          
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span>Free</span>
+          </div>
+          
+          <div class="divider"></div>
+          
+          <div class="summary-total">
+            <span>Total</span>
+            <span>${{ totalAmount().toFixed(2) }}</span>
+          </div>
+
+          <div class="address-preview">
+            <small>Shipping to:</small>
+            <p>{{ store.currentOrder()?.shipping_address || 'No address selected' }}</p>
+          </div>
+
+          <button 
+            class="checkout-btn" 
+            (click)="checkout()"
+            [disabled]="displayItems().length === 0 || store.loading()">
+            Proceed to Checkout
+          </button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>

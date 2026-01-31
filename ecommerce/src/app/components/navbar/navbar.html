@@ -1,0 +1,19 @@
+<nav class="navbar">
+  <div class="nav-container">
+    <a routerLink="/" class="logo">E-Com<span>Store</span></a>
+
+    <ul class="nav-links">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+      
+      @if (userStore.currentUser()) {
+        <li><a routerLink="/cart" routerLinkActive="active" class="cart-link">
+          Cart 
+        </a></li>
+        <li><a routerLink="/order" routerLinkActive="active">order</a></li>
+        <li><button (click)="logout()" class="btn-logout">Logout</button></li>
+      } @else {
+        <li><a routerLink="/login" class="btn-login">Login</a></li>
+      }
+    </ul>
+  </div>
+</nav>

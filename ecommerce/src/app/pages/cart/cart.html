@@ -1,0 +1,92 @@
+<div class="cart-container">
+  <header class="cart-header">
+    <h1>Shopping Cart</h1>
+    <span class="badge" *ngIf="!store.loading()">
+      {{ store.totalItems() }} Items
+    </span>
+  </header>
+
+  @if (store.loading()) {
+    <div class="status-message">
+      <div class="spinner"></div>
+      <p>Updating cart...</p>
+    </div>
+  }
+
+  @if (store.error()) {
+    <div class="error-banner">
+      <p>Error: {{ store.error() }}</p>
+      <button (click)="retryLoad()">Retry</button>
+      <button (click)="store.clearError()">Dismiss</button>
+    </div>
+  }
+
+  @if (!store.loading() && store.isEmpty()) {
+    <div class="empty-state">
+      <h3>Your cart is empty</h3>
+      <p>Looks like you haven't added anything yet.</p>
+    </div>
+  }
+
+  @if (!store.isEmpty()) {
+    <div class="cart-content">
+      <div class="items-list">
+        @for (item of store.cartItems(); track item.id) {
+          <div class="cart-item">
+            <div class="item-details">
+              <h4>{{ item.product.name || 'Product #' + item.product.id }}</h4>
+              <p class="price">{{ item.product.price | currency }}</p>
+            </div>
+
+            <div class="item-controls">
+              <div class="quantity-group">
+                <button 
+                  (click)="decreaseQuantity(item)" 
+                  [disabled]="store.loading()"
+                  class="qty-btn">
+                  -
+                </button>
+                <span class="qty-display">{{ item.quantity }}</span>
+                <button 
+                  (click)="increaseQuantity(item)" 
+                  [disabled]="store.loading()"
+                  class="qty-btn">
+                  +
+                </button>
+              </div>
+
+              <div class="item-total">
+                {{ (item.product.price * item.quantity) | currency }}
+              </div>
+
+              <button 
+                class="remove-btn" 
+                (click)="removeItem(item.product.id)"
+                [disabled]="store.loading()">
+                Remove
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <strong>{{ store.totalPrice() | currency }}</strong>
+        </div>
+        
+        <div class="actions">
+          <button class="clear-btn" (click)="clearCart()">Empty Cart</button>
+          <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+        
+        @if (store.lastUpdated()) {
+          <p class="last-updated">
+            Last updated: {{ store.lastUpdated() | date:'mediumTime' }}
+          </p>
+        }
+      </div>
+    </div>
+  }
+</div>

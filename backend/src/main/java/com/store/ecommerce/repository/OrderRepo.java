@@ -1,6 +1,7 @@
 package com.store.ecommerce.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +17,6 @@ public interface OrderRepo extends JpaRepository<Order,Long>{
     @Query("SELECT COALESCE(SUM(oi.product.price * oi.productQuantity), 0) FROM OrderItems oi WHERE oi.order.id = :orderId")
     Double total_price(Long orderId);
 
+    // Finds the first order for a specific user, sorted by creation time descending
+    Optional<Order> findFirstByUserIdOrderByCreatedAtDesc(Long userId);
 }

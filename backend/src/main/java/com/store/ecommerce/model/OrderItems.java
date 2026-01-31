@@ -6,12 +6,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import jakarta.persistence.Id; 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 @Entity
 @Table(name = "Order_items")
+@Setter
+@Getter
 public class OrderItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,29 +38,4 @@ public class OrderItems {
         this.product = prod;
         this.productQuantity = quantity;
     }
-
-    public Long getId(){
-        return this.id;
-    }
-
-    public Integer getQuantity(){
-        return productQuantity;
-    }
-
-    public void setQuantity(int number){
-        this.productQuantity = number;
-    }
-
-    public void setProduct(Product _product){
-        this.product = _product;
-    }
-
-    public Product getProduct(){
-        return this.product;
-    }
-
-    public Order getOrder(){
-        return this.order;
-    }
-
 }

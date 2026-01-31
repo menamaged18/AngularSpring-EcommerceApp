@@ -123,9 +123,14 @@ public class OrderService {
             orderItemsService.replaceOrderItems(oldOrder, newOrder);
         }
 
-        oldOrder.setUpdated_at(LocalDateTime.now());
+        oldOrder.setUpdatedAt(LocalDateTime.now());
 
         return orderRepo.save(oldOrder);
     }
 
+    public Long getLastOrderId(Long userId) {
+        return orderRepo.findFirstByUserIdOrderByCreatedAtDesc(userId)
+                .map(Order::getId)
+                .orElse(null); // Return null if user has no orders
+    }
 }

@@ -46,6 +46,10 @@ export class OrderService {
     return this.http.get<Order[]>(`${this.orderBaseUrl}/getUserOrders/${userId}`);
   }
 
+  lastOrderIdByUser(userId: number): Observable<number>{
+    return this.http.get<number>(`${this.orderBaseUrl}/lastOrderIdByUser/${userId}`);
+  }
+
   editOrder(id: number, newOrder: Partial<Order>): Observable<Order> {
     return this.http.put<Order>(`${this.orderBaseUrl}/edit/${id}`, newOrder);
   }

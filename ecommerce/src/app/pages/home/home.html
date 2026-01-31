@@ -14,13 +14,14 @@
       <div class="error-icon">⚠️</div>
       <h3 class="error-title">Something went wrong</h3>
       <p class="error-message">{{ error() }}</p>
-      <button class="retry-button" (click)="store.loadProducts()">Try Again</button>
+      <button class="retry-button" (click)="productStore.loadProducts()">Try Again</button>
     </div>
   } @else {
     <div class="products-container">
       <div class="products-grid">
         @for (p of products(); track p.id) {
           <div class="product-card">
+          <a [routerLink]="['/productDetails', p.id]">
             <div class="product-image-container">
               <img 
                 [src]="p.imageUrl || 'noImage.png'" 
@@ -32,13 +33,8 @@
                 <div class="inactive-badge">Out of Stock</div>
               }
               
-              @if (p.reviews?.length) {
-                <div class="review-badge">
-                  ⭐ {{ getAverageRating(p.reviews) }}
-                </div>
-              }
             </div>
-
+          </a>
             <div class="product-info">
               <div class="product-header">
                 <span class="product-category">{{ p.category }}</span>
@@ -58,8 +54,21 @@
                 <span class="product-brand">{{ p.brand }}</span>
               </div>
               
-              <button class="view-details-button">View Details</button>
-            </div>
+              <div class="actions-container">
+                <button 
+                  class="btn-action btn-cart" 
+                  [disabled]="!p.is_active"
+                  (click)="onAddToCart(p, $event)">
+                  Add to Cart
+                </button>
+                <button 
+                  class="btn-action btn-order" 
+                  [disabled]="!p.is_active"
+                  (click)="onAddToOrder(p, $event)">
+                  Buy Now
+                </button>
+              </div>
+              </div>
           </div>
         } @empty {
           <div class="empty-state">
@@ -73,7 +82,3 @@
     </div>
   }
 </div>
-<!-- 
-<app-add-product>
-
-</app-add-product>   -->

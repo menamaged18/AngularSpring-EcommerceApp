@@ -48,7 +48,7 @@ public class OrderItemsService {
         if (optItem.isPresent()) {
             // If item exists, update its quantity
             OrderItems orderItem = optItem.get();
-            orderItem.setQuantity(orderItem.getQuantity() + quantity);
+            orderItem.setProductQuantity(orderItem.getProductQuantity() + quantity);
             savedItem = orderItemRepo.save(orderItem);
         } else {
             // If item is new, create a new OrderItems entry
@@ -66,7 +66,7 @@ public class OrderItemsService {
 
     public void deleteOrderItemByOrderItemId(Long orderItemId){
         OrderItems orderItem = getOrderItemByOrderItemsId(orderItemId);
-        int oldQuantity = orderItem.getQuantity();
+        int oldQuantity = orderItem.getProductQuantity();
         // get order id before deleting the item because if we deleted the item we can't get the order id
         Order order = orderItem.getOrder();
         orderItemRepo.deleteById(orderItemId);
@@ -90,7 +90,7 @@ public class OrderItemsService {
         OrderItems oldOrderDetails = getOrderItemByOrderItemsId(orderDetailsID);
 
         // first checking and updating the quantity available first
-        prodServ.updateStock(oldOrderDetails.getProduct(), quantity, oldOrderDetails.getQuantity());
+        prodServ.updateStock(oldOrderDetails.getProduct(), quantity, oldOrderDetails.getProductQuantity());
 
         if (productId != null && oldOrderDetails.getProduct().getId() != productId) {
             Product newProduct = prodServ.returnProductById(productId);
@@ -98,7 +98,7 @@ public class OrderItemsService {
         }
 
         if (quantity != null) {
-            oldOrderDetails.setQuantity(quantity);
+            oldOrderDetails.setProductQuantity(quantity);
         }
 
         OrderItems savedOrder = orderItemRepo.save(oldOrderDetails);
@@ -122,12 +122,12 @@ public class OrderItemsService {
             OrderItems existingItem = oldItemsMap.remove(productId);  // Remove from map to track deletions later
             if (existingItem != null) {
                 // Update quantity if changed (handles stock diff via editOrderItem)
-                if (!existingItem.getQuantity().equals(newItem.getQuantity())) {
-                    editOrderItem(existingItem.getId(), existingItem.getProduct().getId(), newItem.getQuantity());
+                if (!existingItem.getProductQuantity().equals(newItem.getProductQuantity())) {
+                    editOrderItem(existingItem.getId(), existingItem.getProduct().getId(), newItem.getProductQuantity());
                 }
             } else {
                 // Add new item
-                addItemToOrder(oldOrder, newItem.getProduct(), newItem.getQuantity());
+                addItemToOrder(oldOrder, newItem.getProduct(), newItem.getProductQuantity());
             }
         }
 

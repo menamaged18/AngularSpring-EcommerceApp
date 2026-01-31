@@ -67,6 +67,11 @@ public class OrderController {
         return ordServ.getAllUserOrders(userId).stream().map(order -> new OrderResponse(order)).collect(Collectors.toList());
     }
 
+    @GetMapping("lastOrderIdByUser/{userId}")
+    public Long lastOrderIdByUser(@PathVariable Long userId){
+        return ordServ.getLastOrderId(userId);
+    }
+
     @PutMapping("edit/{id}")
     public OrderResponse editOrder(@PathVariable Long id, @RequestBody Order newOrder) {
         return new OrderResponse(ordServ.EditOrder(id, newOrder));

@@ -1,0 +1,27 @@
+<div class="login-container">
+  <h2>Account Login</h2>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="Enter email">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" placeholder="Enter password">
+    </div>
+
+    @if (store.error()) {
+      <div class="error-banner">{{ store.error() }}</div>
+    }
+
+    <button type="submit" [disabled]="loginForm.invalid || store.isLoading()">
+      {{ store.isLoading() ? 'Logging in...' : 'Login' }}
+    </button>
+  </form>
+
+  @if (store.isAuthenticated()) {
+    <p class="success">Welcome back, {{ store.currentUser()?.name }}!</p>
+  }
+</div>

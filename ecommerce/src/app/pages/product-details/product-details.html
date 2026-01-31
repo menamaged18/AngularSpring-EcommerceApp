@@ -1,0 +1,216 @@
+<div class="product-details-container">
+  @if (loading()) {
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+      <p>Loading product details...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-container">
+      <div class="error-icon">⚠️</div>
+      <h3>Product Not Found</h3>
+      <p>{{ error() }}</p>
+      <!-- <button class="btn-back" (click)="goBack()">Back to Products</button> -->
+    </div>
+  } @else if (product()) {
+    <div class="product-details">
+      <!-- Back button -->
+      <!-- <button class="back-button" (click)="goBack()"> -->
+        <!-- ← Back to Products
+      </button>  -->
+
+      <!-- Product main content -->
+      <div class="product-main">
+        <!-- Product Image -->
+        <div class="product-image-section">
+          <div class="image-container">
+            <img 
+              [src]="product()!.imageUrl || 'noImage.png'" 
+              [alt]="product()!.name"
+              class="main-image"
+              (error)="productStore.productState().product!.imageUrl = 'noImage.png'"
+            />
+            @if (!product()!.is_active) {
+              <div class="out-of-stock-overlay">
+                <span>Out of Stock</span>
+              </div>
+            }
+          </div>
+          
+          <!-- Rating -->
+          <!-- <div class="rating-section">
+            <div class="stars">
+              @for (star of getStars(averageRating()); track $index) {
+                <span class="star filled">★</span>
+              }
+              @for (star of getEmptyStars(averageRating()); track $index) {
+                <span class="star empty">☆</span>
+              }
+              <span class="rating-text">{{ averageRating() | number:'1.1-1' }} ({{ reviews().length }} reviews)</span>
+            </div>
+          </div> -->
+        </div>
+
+        <!-- Product Info -->
+        <div class="product-info-section">
+          <!-- Stock status -->
+          <div class="stock-status">
+            @if (product()!.is_active) {
+              <span class="in-stock">✓ In Stock</span>
+              <span class="quantity-available">{{ product()!.quantity }} units available</span>
+            } @else {
+              <span class="out-of-stock">✗ Out of Stock</span>
+            }
+          </div>
+
+          <!-- Product name and brand -->
+          <h1 class="product-title">{{ product()!.name }}</h1>
+          <div class="brand-category">
+            <span class="brand">{{ product()!.brand }}</span>
+            <span class="category-badge">{{ product()!.category }}</span>
+          </div>
+
+          <!-- Price -->
+          <div class="price-section">
+            <span class="current-price">{{ product()!.price | currency }}</span>
+          </div>
+
+          <!-- Description -->
+          <div class="description-section">
+            <h3>Description</h3>
+            <p class="description">{{ product()!.description }}</p>
+          </div>
+
+          <!-- Specifications -->
+          <div class="specifications">
+            <h3>Specifications</h3>
+            <div class="spec-grid">
+              <div class="spec-item">
+                <span class="spec-label">Weight</span>
+                <span class="spec-value">{{ product()!.weight }}g</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Category</span>
+                <span class="spec-value">{{ product()!.category }}</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Brand</span>
+                <span class="spec-value">{{ product()!.brand }}</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Added</span>
+                <span class="spec-value">{{ product()!.created_at | date:'mediumDate' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cart Actions -->
+          <div class="cart-actions-section">
+            <!-- Quantity selector -->
+            <div class="quantity-selector">
+              <label for="quantity">Quantity:</label>
+              <div class="quantity-controls">
+                <button class="quantity-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1">-</button>
+                <input 
+                  type="number" 
+                  id="quantity" 
+                  [(ngModel)]="quantity" 
+                  min="1" 
+                  max="10"
+                  class="quantity-input"
+                />
+                <button class="quantity-btn" (click)="increaseQuantity()" [disabled]="quantity >= 10">+</button>
+              </div>
+            </div>
+
+            <!-- Cart status for authenticated users -->
+            @if (isAuthenticated()) {
+              <div class="cart-status">
+                @if (isInCart()) {
+                  <div class="in-cart-message">
+                    <span class="cart-badge">✓ In Cart</span>
+                    <span class="cart-quantity">({{ cartQuantity() }} in cart)</span>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Action buttons -->
+            <div class="action-buttons">
+              @if (isAuthenticated()) {
+                @if (isInCart()) {
+                  <button 
+                    class="btn-remove-cart" 
+                    (click)="removeFromCart()"
+                    [disabled]="!product()!.is_active">
+                    Remove from Cart
+                  </button>
+                  <button 
+                    class="btn-update-cart" 
+                    (click)="updateQuantityInCart()"
+                    [disabled]="!product()!.is_active || cartQuantity() === quantity">
+                    Update Quantity
+                  </button>
+                } @else {
+                  <button 
+                    class="btn-add-cart" 
+                    (click)="addToCart()"
+                    [disabled]="!product()!.is_active">
+                    Add to Cart
+                  </button>
+                }
+              } @else {
+                <button 
+                  class="btn-login-required" 
+                  (click)="addToCart()">
+                  Login to Add to Cart
+                </button>
+              }
+              
+              <button 
+                class="btn-buy-now" 
+                [disabled]="!product()!.is_active || !isAuthenticated()">
+                Buy Now
+              </button>
+            </div>
+
+            <!-- Login prompt for non-authenticated users -->
+            @if (!isAuthenticated()) {
+              <div class="login-prompt">
+                <p>Please login to add items to your cart and make purchases.</p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Section -->
+      @if (reviews().length > 0) {
+        <div class="reviews-section">
+          <h2>Customer Reviews</h2>
+          <div class="reviews-grid">
+            @for (review of reviews(); track review.id) {
+              <div class="review-card">
+                <div class="review-header">
+                  <div class="reviewer-stars">
+                    <!-- @for (star of getStars(review.rating); track $index) {
+                      <span class="star filled">★</span>
+                    } -->
+                    <!-- @for (star of getEmptyStars(review.rating); track $index) {
+                      <span class="star empty">☆</span>
+                    } -->
+                  </div>
+                  <span class="review-date">{{ review.created_at | date:'mediumDate' }}</span>
+                </div>
+                <h4 class="review-title">{{ review.title }}</h4>
+                <!-- <p class="review-content">{{ review.content }}</p> -->
+                <div class="reviewer-info">
+                  <!-- <span class="reviewer-name">{{ review.user_name }}</span> -->
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }          
+</div>

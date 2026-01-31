@@ -1,0 +1,26 @@
+<div class="add-user-container">
+  <h3>Create New User</h3>
+  
+  <form [formGroup]="userForm" (ngSubmit)="addUser()">
+    <input type="text" formControlName="username" placeholder="Full Name">
+    <input type="email" formControlName="email" placeholder="Email Address">
+    <input type="password" formControlName="password" placeholder="Password">
+    <input type="phone" formControlName="phone" placeholder="Phone">
+    
+    <!-- For Admin Use i will do it later -->
+    <!-- <select formControlName="userType">
+      <option value="Normal">Standard User</option>
+      <option value="Admin">Administrator</option>
+    </select> -->
+
+    @if (store.error()) {
+      <p class="error">{{ store.error() }}</p>
+    }
+
+    <button type="submit" [disabled]="userForm.invalid || store.isLoading()">
+      {{ store.isLoading() ? 'Saving...' : 'Create User' }}
+    </button>
+  </form>
+
+  <hr>
+</div>

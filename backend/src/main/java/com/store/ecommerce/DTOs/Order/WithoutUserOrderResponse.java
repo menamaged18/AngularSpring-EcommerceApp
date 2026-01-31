@@ -28,8 +28,8 @@ public class WithoutUserOrderResponse {
 
     public WithoutUserOrderResponse(Order _Order){
         this.id = _Order.getId();
-        this.created_at = _Order.getCreated_at();
-        this.updated_at = _Order.getUpdated_at();
+        this.created_at = _Order.getCreatedAt();
+        this.updated_at = _Order.getUpdatedAt();
         this.total_amount = _Order.getTotal_amount();
         this.shipping_address = _Order.getShipping_address();
         this.order_Status = _Order.getOrder_Status();
